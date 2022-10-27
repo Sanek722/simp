@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+struct Node
+{
+    char bob;
+    Node* left, * right;
+
+    Node(char sym)
+    {
+        bob = sym;
+        left = nullptr;
+        right = nullptr;
+    };
+    Node(char sym, Node* _left, Node* _right)
+    {
+        bob = sym;
+        left = _left;
+        right = _right;
+    };
+};
+struct list
+{
+    Node* first;
+    vector <Node*> mass;
+    bool is_empty()  //проверка на наличие первого элемента
+    {
+        return first == nullptr;
+    }
+    void push_back(char symb) //добавление
+    {
+        if (symb == '+' or symb == '-' or symb == '*' or symb == '/')
+        {
+            int chet = mass.size() - 1;
+            Node* f = mass[chet];
+            Node* s = mass[chet-1];
+            mass.pop_back();
+            mass.pop_back();
+            Node* p = new Node(symb, s, f);
+            mass.push_back(p);
+            first = p;
+        }
+        else
+        {
+            Node* p = new Node(symb);
+            mass.push_back(p);
+        }
+    }
+};
+
+void print_tree(Node *q, long n)
+{
+    if (q)
+    {
+        print_tree(q->right, n+5);
+        for (int i = 0; i < n; i++)
+        {
+            cout << " ";
+        }
+        cout << q->bob <<endl;
+        print_tree(q->left, n+5);
+    }
+}
+
+int main()
+{
+    string str = "+A+*BCD";
+    int i = str.size() - 1;
+    Node* sod;
+    list obj;
+    while ( i != -1)
+    {
+        obj.push_back(str[i]);
+        i--;
+    }
+    print_tree(obj.first, 1);
+}
